@@ -1,0 +1,3 @@
+101,Deluxe,120.50,30.00,available
+201,Suite,250.00,50.00,booked
+102,Deluxe,120.50,30.00,available

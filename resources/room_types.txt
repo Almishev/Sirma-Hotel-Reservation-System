@@ -1,0 +1,4 @@
+Deluxe,WiFi,TV,Minibar,2
+Suite,WiFi,TV,Minibar,Balcony,4
+Single,WiFi,1
+Double,WiFi,TV,2
