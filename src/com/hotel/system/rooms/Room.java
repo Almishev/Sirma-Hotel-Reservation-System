@@ -49,6 +49,13 @@ public class Room {
         this.available = available;
     }
 
+    public void updateStatus(boolean isAvailable) {
+        this.available = isAvailable;
+    }
+
+
+
+
     public boolean isAvailableForDates(String startDate, String endDate) {
         for (Booking booking : bookings) {
             if (booking.overlapsWith(startDate, endDate)) {

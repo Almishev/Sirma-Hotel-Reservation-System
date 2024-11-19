@@ -80,4 +80,19 @@ public class UserManager {
         return users.get(username);
     }
 
+
+    public User authenticateUser(String username, String password) {
+        String encryptedPassword = cipher.encrypt(password); // Шифроваме въведената парола
+
+        for (User user : users.values()) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(encryptedPassword)) {
+                return user; // Връща потребителя, ако има съвпадение
+            }
+        }
+        return null;
+    }
+
+
+
+
 }

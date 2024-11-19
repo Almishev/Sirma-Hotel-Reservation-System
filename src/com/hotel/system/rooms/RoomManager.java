@@ -49,11 +49,13 @@ public class RoomManager {
         Room room = findRoomByNumber(roomNumber);
         if (room != null) {
             room.setAvailable(isAvailable);
+            saveRoomsToFile();
             System.out.println("Room " + roomNumber + " status updated to " + (isAvailable ? "Available" : "Booked"));
         } else {
             System.out.println("Room " + roomNumber + " not found.");
         }
     }
+
 
     public List<Room> getRooms() {
         return rooms;

@@ -42,4 +42,6 @@ public class RoomTypeManager {
     public List<RoomType> getRoomTypes() {
         return roomTypes;
     }
+
+
 }
