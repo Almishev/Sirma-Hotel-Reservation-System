@@ -1,6 +1,7 @@
 import com.hotel.system.menus.AdminMenu;
 import com.hotel.system.menus.MainMenu;
 import com.hotel.system.rooms.RoomManager;
+import com.hotel.system.rooms.RoomTypeManager;
 import com.hotel.system.users.User;
 import com.hotel.system.users.UserManager;
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class Main {
     private static UserManager userManager = new UserManager();
     private static Scanner scanner = new Scanner(System.in);
-
+    private static RoomTypeManager roomTypeManager = new RoomTypeManager();
     private static RoomManager roomManager = new RoomManager();
     private static User currentUser = null;
 
@@ -39,7 +40,7 @@ public class Main {
                     AdminMenu adminMenu = new AdminMenu(userManager,roomManager);
                     stayLoggedIn = adminMenu.showMenu(currentUser);
                 } else {
-                    MainMenu mainMenu = new MainMenu(userManager);
+                    MainMenu mainMenu = new MainMenu(userManager,roomTypeManager);
                     stayLoggedIn = mainMenu.showMenu(currentUser);
                 }
 

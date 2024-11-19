@@ -2,12 +2,14 @@ package com.hotel.system.menus;
 
 import com.hotel.system.rooms.Room;
 import com.hotel.system.rooms.RoomManager;
+import com.hotel.system.rooms.RoomType;
 import com.hotel.system.users.User;
 import com.hotel.system.users.UserManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
@@ -78,7 +80,6 @@ public class AdminMenu {
         }
     }
 
-
     private void addRoom() {
         System.out.println("\nAdd Room:");
         try {
@@ -86,8 +87,23 @@ public class AdminMenu {
             int roomNumber = Integer.parseInt(scanner.nextLine());
 
             System.out.print("Enter room type (e.g., Deluxe, Suite): ");
-            String roomType = scanner.nextLine();
+            String roomTypeName = scanner.nextLine();
 
+            RoomType type;
+            switch (roomTypeName.toLowerCase()) {
+                case "deluxe":
+                    type = new RoomType("Deluxe", List.of("WiFi", "TV", "Minibar"), 2);
+                    break;
+                case "single":
+                    type = new RoomType("Single", List.of("WiFi"), 1);
+                    break;
+                case "suite":
+                    type = new RoomType("Suite", List.of("WiFi", "TV", "Minibar", "Balcony"), 4);
+                    break;
+                default:
+                    System.out.println("Invalid room type. Please choose from available options.");
+                    return;
+            }
             System.out.print("Enter price per night: ");
             double pricePerNight = Double.parseDouble(scanner.nextLine());
 
@@ -96,8 +112,7 @@ public class AdminMenu {
 
             boolean available = true;
 
-            Room newRoom = new Room(roomNumber, roomType, pricePerNight, cancellationFee, available);
-            RoomManager roomManager = new RoomManager();
+            Room newRoom = new Room(roomNumber, type, pricePerNight, cancellationFee, available);
             roomManager.getRooms().add(newRoom);
             roomManager.saveRoomsToFile();
             System.out.println("Room added successfully!");

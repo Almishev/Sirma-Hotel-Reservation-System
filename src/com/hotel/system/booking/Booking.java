@@ -1,13 +1,15 @@
 package com.hotel.system.booking;
 
+import com.hotel.system.rooms.RoomType;
+
 public class Booking {
     private String username;
     private int roomNumber;
-    private String roomType;
+    private RoomType roomType;
     private String startDate;
     private String endDate;
 
-    public Booking(String username, int roomNumber, String roomType, String startDate, String endDate) {
+    public Booking(String username, int roomNumber, RoomType roomType, String startDate, String endDate) {
         this.username = username;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
@@ -23,7 +25,7 @@ public class Booking {
         return roomNumber;
     }
 
-    public String getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 

@@ -4,6 +4,7 @@ import com.hotel.system.booking.Booking;
 import com.hotel.system.booking.BookingManager;
 import com.hotel.system.rooms.Room;
 import com.hotel.system.rooms.RoomManager;
+import com.hotel.system.rooms.RoomTypeManager;
 import com.hotel.system.users.User;
 import com.hotel.system.users.UserManager;
 
@@ -11,10 +12,13 @@ import java.util.Scanner;
 
 public class MainMenu {
     private UserManager userManager;
+    private RoomTypeManager roomTypeManager;
     private Scanner scanner;
 
-    public MainMenu(UserManager userManager) {
+
+    public MainMenu(UserManager userManager,RoomTypeManager roomTypeManager) {
         this.userManager = userManager;
+        this.roomTypeManager = roomTypeManager;
         this.scanner = new Scanner(System.in);
     }
 
@@ -25,7 +29,8 @@ public class MainMenu {
             System.out.println("2. Book a Room");
             System.out.println("3. Cancel Booking");
             System.out.println("4. View Profile");
-            System.out.println("5. Log Out");
+            System.out.println("5. DisplayRoomTypes");
+            System.out.println("6. Log Out");
             System.out.print("Choose an option: ");
             int choice = Integer.parseInt(scanner.nextLine());
 
@@ -34,9 +39,10 @@ public class MainMenu {
                 case 2 -> bookRoom(user);
                 case 3 -> cancelBooking(user);
                 case 4 -> viewProfile(user);
-                case 5 -> {
+                case 5 -> displayRoomTypes();
+                case 6 -> {
                     System.out.println("Logging out...");
-                    return false; // Сигнал за връщане към главното меню
+                    return false;
                 }
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -68,7 +74,7 @@ public class MainMenu {
             String endDate = scanner.nextLine();
 
             RoomManager roomManager = new RoomManager();
-            BookingManager bookingManager = new BookingManager(roomManager, userManager);
+            BookingManager bookingManager = new BookingManager(roomManager, userManager,roomTypeManager);
 
             boolean success = bookingManager.bookRoom(user.getUsername(), roomType, startDate, endDate);
             if (success) {
@@ -84,7 +90,7 @@ public class MainMenu {
     private void cancelBooking(User user) {
         System.out.println("\nCancel Booking:");
 
-        BookingManager bookingManager = new BookingManager(new RoomManager(), userManager);
+        BookingManager bookingManager = new BookingManager(new RoomManager(), userManager,new RoomTypeManager());
 
         var userBookings = bookingManager.getUserBookings(user.getUsername());
 
@@ -124,5 +130,11 @@ public class MainMenu {
     private void viewProfile(User user) {
         System.out.println("\nYour Profile:");
         System.out.println(user);
+    }
+
+    private void displayRoomTypes() {
+        System.out.println("\nWe offer you these room types:");
+        roomTypeManager.displayRoomTypes();
+
     }
 }

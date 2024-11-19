@@ -1,3 +1,4 @@
-101,Deluxe,120.5,30.0,available
-201,Suite,250.0,50.0,available
-102,Deluxe,120.5,30.0,available
+101,RoomType{name='Deluxe', amenities=[WiFi, TV, Minibar], maxOccupancy=2},120.5,30.0,booked
+201,RoomType{name='Suite', amenities=[WiFi, TV, Minibar, Balcony], maxOccupancy=4},250.0,50.0,available
+102,RoomType{name='Deluxe', amenities=[WiFi, TV, Minibar], maxOccupancy=2},120.5,30.0,available
+204,RoomType{name='Deluxe', amenities=[WiFi, TV, Minibar], maxOccupancy=2},280.0,80.0,available

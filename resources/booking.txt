@@ -2,3 +2,4 @@ Anton,101,Deluxe,2024-11-20,2024-11-22
 Ivan,101,Deluxe,2024-11-20,2024-11-22
 Mila,101,Deluxe,2024-11-20,2024-11-22
 Lyubo,102,Deluxe,2024-11-20,2024-11-22
+Anton,101,RoomType{name='Deluxe', amenities=[WiFi, TV, Minibar], maxOccupancy=2},2024-12-24,2024-12-26

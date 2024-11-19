@@ -2,6 +2,7 @@ package com.hotel.system.rooms;
 
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,29 +13,60 @@ public class RoomManager {
         this.rooms = new ArrayList<>();
         loadRoomsFromFile();
     }
-
     private void loadRoomsFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader("resources/rooms.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
+
+                if (parts.length != 5) {
+                    System.out.println("Грешка: Невалиден формат на реда в rooms.txt (ред: " + line + ")");
+                    continue;
+                }
+
                 int roomNumber = Integer.parseInt(parts[0]);
-                String type = parts[1];
+                String roomTypeName = parts[1].trim();
                 double pricePerNight = Double.parseDouble(parts[2]);
                 double cancellationFee = Double.parseDouble(parts[3]);
                 boolean available = parts[4].equalsIgnoreCase("available");
-                rooms.add(new Room(roomNumber, type, pricePerNight, cancellationFee, available));
+
+
+                RoomType type = createRoomType(roomTypeName);
+
+                if (type == null) {
+                    System.out.println("Грешка: Невалиден тип стая: " + roomTypeName);
+                    continue;
+                }
+
+                Room newRoom = new Room(roomNumber, type, pricePerNight, cancellationFee, available);
+                rooms.add(newRoom);
             }
         } catch (IOException e) {
-            System.out.println("Error reading rooms file: " + e.getMessage());
+            System.out.println("Грешка при четене на файла със стаите: " + e.getMessage());
         }
     }
 
+    private RoomType createRoomType(String name) {
+        // Логика за създаване на RoomType обект въз основа на името
+        switch (name) {
+            case "Deluxe":
+                return new RoomType(name, List.of("WiFi", "TV", "Minibar"), 2);
+            case "Single":
+                return new RoomType(name, List.of("WiFi"), 1);
+            case "Suite":
+                return new RoomType(name, List.of("WiFi", "TV", "Minibar", "Balcony"), 4);
+            default:
+                System.out.println("Неизвестен тип стая: " + name);
+                return null;
+        }
+    }
     public void displayRooms() {
         for (Room room : rooms) {
             System.out.println(room);
         }
     }
+
+
 
     public Room findRoomByNumber(int roomNumber) {
         for (Room room : rooms) {
@@ -61,11 +93,11 @@ public class RoomManager {
         return rooms;
     }
 
-    public List<Room> getAvailableRooms(String roomType, String startDate, String endDate) {
+    public List<Room> getAvailableRooms(String roomTypeName, String startDate, String endDate) {
         List<Room> availableRooms = new ArrayList<>();
 
         for (Room room : rooms) {
-            if (room.getType().equalsIgnoreCase(roomType) &&
+            if (room.getType().getName().equalsIgnoreCase(roomTypeName) &&
                     room.isAvailable() &&
                     room.isAvailableForDates(startDate, endDate)) {
                 availableRooms.add(room);
@@ -78,7 +110,7 @@ public class RoomManager {
 
     public boolean checkRoomAvailability(String roomType, String startDate, String endDate) {
         List<Room> availableRooms = getAvailableRooms(roomType, startDate, endDate);
-        return !availableRooms.isEmpty(); // Връща true, ако има налични стаи
+        return !availableRooms.isEmpty();
     }
 
 

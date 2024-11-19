@@ -7,15 +7,15 @@ import java.util.List;
 
 public class Room {
     private int roomNumber;
-    private String type;
+    private RoomType roomType;
     private double pricePerNight;
     private double cancellationFee;
     private boolean available;
     private List<Booking> bookings;
 
-    public Room(int roomNumber, String type, double pricePerNight, double cancellationFee, boolean available) {
+    public Room(int roomNumber, RoomType type, double pricePerNight, double cancellationFee, boolean available) {
         this.roomNumber = roomNumber;
-        this.type = type;
+        this.roomType = type;
         this.pricePerNight = pricePerNight;
         this.cancellationFee = cancellationFee;
         this.available = available;
@@ -26,8 +26,8 @@ public class Room {
         return roomNumber;
     }
 
-    public String getType() {
-        return type;
+    public RoomType getType() {
+        return roomType;
     }
 
     public double getPricePerNight() {
@@ -68,7 +68,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room " + roomNumber + " [" + type + "] - " + available +
+        return "Room " + roomNumber + " [" + roomType.toString() + "] - " + available +
                 ", Price: " + pricePerNight + " BGN, Cancellation Fee: " + cancellationFee + " BGN";
     }
 }

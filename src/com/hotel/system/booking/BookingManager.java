@@ -2,6 +2,8 @@ package com.hotel.system.booking;
 
 import com.hotel.system.rooms.Room;
 import com.hotel.system.rooms.RoomManager;
+import com.hotel.system.rooms.RoomType;
+import com.hotel.system.rooms.RoomTypeManager;
 import com.hotel.system.users.User;
 import com.hotel.system.users.UserManager;
 
@@ -11,10 +13,13 @@ import java.util.*;
 public class BookingManager {
     private RoomManager roomManager;
     private UserManager userManager;
+
+    private RoomTypeManager roomTypeManager;
     private List<Booking> bookings;
 
-    public BookingManager(RoomManager roomManager, UserManager userManager) {
+    public BookingManager(RoomManager roomManager, UserManager userManager,RoomTypeManager roomTypeManager) {
         this.roomManager = roomManager;
+        this.roomTypeManager = roomTypeManager;
         this.userManager = userManager;
         this.bookings = loadBookingsFromFile();
     }
@@ -38,11 +43,13 @@ public class BookingManager {
 
     }
 
+
     public List<Booking> getUserBookings(String username) {
         return bookings.stream()
                 .filter(booking -> booking.getUsername().equalsIgnoreCase(username))
                 .toList();
     }
+
 
 
     public boolean cancelBooking(Booking bookingToCancel) {
@@ -58,12 +65,6 @@ public class BookingManager {
             saveBookingsToFile();
             User user = userManager.getUser(bookingToCancel.getUsername());
             if (user != null) {
-
-                String bookingDetails = bookingToCancel.getRoomNumber() + "," +
-                        bookingToCancel.getStartDate() + "," +
-                        bookingToCancel.getEndDate();
-
-                user.getBookingHistory().remove(bookingDetails);
 
                 userManager.saveUsersToFile();
             }
@@ -92,43 +93,30 @@ public class BookingManager {
 
 
     public boolean bookRoom(String username, String roomType, String startDate, String endDate) {
-
         boolean hasAvailableRooms = roomManager.checkRoomAvailability(roomType, startDate, endDate);
-
         if (!hasAvailableRooms) {
             System.out.println("No rooms available for the selected type and dates.");
-            return false;
-        }
-
+            return false;}
         List<Room> availableRooms = roomManager.getAvailableRooms(roomType, startDate, endDate);
-
         List<Booking> existingBookings = loadBookingsFromFile();
-
         for (Room room : availableRooms) {
             boolean isRoomBooked = existingBookings.stream().anyMatch(b ->
                     b.getRoomNumber() == room.getRoomNumber() &&
                             !(endDate.compareTo(b.getStartDate()) <= 0 || startDate.compareTo(b.getEndDate()) >= 0));
-
             if (!isRoomBooked) {
-
                 room.setAvailable(false);
                 roomManager.updateRoomStatus(room.getRoomNumber(), false);
-
                 User user = userManager.getUser(username);
                 if (user != null) {
                     String bookingDetails = room.getRoomNumber() + "," + startDate + "," + endDate;
                     user.addBooking(bookingDetails);
-                    userManager.saveUsersToFile();
-                }
-
-                Booking booking = new Booking(username, room.getRoomNumber(), roomType, startDate, endDate);
+                    userManager.saveUsersToFile();}
+                Booking booking = new Booking(username, room.getRoomNumber(), room.getType(), startDate, endDate);
                 saveBookingToFile(booking);
-
                 System.out.println("Room " + room.getRoomNumber() + " booked successfully.");
                 return true;
             }
         }
-
         System.out.println("No rooms available for the selected type and dates.");
         return false;
     }
@@ -144,15 +132,26 @@ public class BookingManager {
                 if (parts.length == 5) {
                     String username = parts[0];
                     int roomNumber = Integer.parseInt(parts[1]);
-                    String roomType = parts[2];
-                    String startDate = parts[3];
-                    String endDate = parts[4];
-                    bookings.add(new Booking(username, roomNumber, roomType, startDate, endDate));
+                    String roomTypeName = parts[2];
+
+                    RoomType roomType = roomTypeManager.findRoomTypeByName(roomTypeName);
+
+                    if (roomType != null) {
+                        String startDate = parts[3];
+                        String endDate = parts[4];
+                        bookings.add(new Booking(username, roomNumber, roomType, startDate, endDate));
+                    } else {
+                        System.out.println("Invalid room type: " + roomTypeName);
+                    }
                 }
             }
         } catch (IOException e) {
             System.out.println("Error loading bookings: " + e.getMessage());
         }
+        return bookings;
+    }
+
+    public List<Booking> getAllBookings() {
         return bookings;
     }
 

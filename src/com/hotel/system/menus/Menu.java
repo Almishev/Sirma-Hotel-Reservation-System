@@ -24,4 +24,17 @@ public abstract class Menu {
     }
 
     public abstract boolean showMenu();
+
+    protected double readDouble(String prompt) {
+
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return Double.parseDouble(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+
 }

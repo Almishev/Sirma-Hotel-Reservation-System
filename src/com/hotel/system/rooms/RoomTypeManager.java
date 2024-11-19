@@ -43,5 +43,14 @@ public class RoomTypeManager {
         return roomTypes;
     }
 
+    public RoomType findRoomTypeByName(String roomTypeName) {
+        for (RoomType roomType : roomTypes) {
+            if (roomType.getName().equalsIgnoreCase(roomTypeName)) {
+                return roomType;
+            }
+        }
+        return null;
+    }
+
 
 }

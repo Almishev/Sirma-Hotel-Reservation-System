@@ -82,11 +82,11 @@ public class UserManager {
 
 
     public User authenticateUser(String username, String password) {
-        String encryptedPassword = cipher.encrypt(password); // Шифроваме въведената парола
+        String encryptedPassword = cipher.encrypt(password);
 
         for (User user : users.values()) {
             if (user.getUsername().equals(username) && user.getPassword().equals(encryptedPassword)) {
-                return user; // Връща потребителя, ако има съвпадение
+                return user;
             }
         }
         return null;
