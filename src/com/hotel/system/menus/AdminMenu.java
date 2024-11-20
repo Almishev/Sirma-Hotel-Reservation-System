@@ -114,7 +114,7 @@ public class AdminMenu {
 
             Room newRoom = new Room(roomNumber, type, pricePerNight, cancellationFee, available);
             roomManager.getRooms().add(newRoom);
-            roomManager.saveRoomsToFile();
+            roomManager.saveDataToFile();
             System.out.println("Room added successfully!");
 
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class AdminMenu {
 
             if (roomToRemove != null) {
                 roomManager.getRooms().remove(roomToRemove);
-                roomManager.saveRoomsToFile();
+                roomManager.saveDataToFile();
                 System.out.println("Room " + roomNumber + " removed successfully!");
             } else {
                 System.out.println("Room not found.");

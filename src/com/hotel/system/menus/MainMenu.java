@@ -76,7 +76,7 @@ public class MainMenu {
             RoomManager roomManager = new RoomManager();
             BookingManager bookingManager = new BookingManager(roomManager, userManager,roomTypeManager);
 
-            boolean success = bookingManager.bookRoom(user.getUsername(), roomType, startDate, endDate);
+            boolean success = bookingManager.bookRoom(user.getUsername(), roomType, startDate, endDate,userManager);
             if (success) {
                 System.out.println("Booking completed successfully!");
             } else {

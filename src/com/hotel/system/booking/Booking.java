@@ -1,20 +1,29 @@
 package com.hotel.system.booking;
 
 import com.hotel.system.rooms.RoomType;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Booking {
     private String username;
     private int roomNumber;
     private RoomType roomType;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    public Booking(String username, int roomNumber, RoomType roomType, String startDate, String endDate) {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public Booking(String username, int roomNumber, RoomType roomType, LocalDate startDate, LocalDate endDate) {
         this.username = username;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+
+    public Booking(String username, int roomNumber, RoomType roomType, String startDate, String endDate) {
+        this(username, roomNumber, roomType, LocalDate.parse(startDate, DATE_FORMATTER), LocalDate.parse(endDate, DATE_FORMATTER));
     }
 
     public String getUsername() {
@@ -29,26 +38,24 @@ public class Booking {
         return roomType;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public boolean overlapsWith(String start, String end) {
-        return !(end.compareTo(startDate) < 0 || start.compareTo(endDate) > 0);
-    }
 
     @Override
     public String toString() {
         return "Booking{" +
                 "username='" + username + '\'' +
-                ", roomNumber='" + roomNumber + '\'' +
-                ", roomType='" + roomType + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
+                ", roomNumber=" + roomNumber +
+                ", roomType=" + roomType +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
+
 }

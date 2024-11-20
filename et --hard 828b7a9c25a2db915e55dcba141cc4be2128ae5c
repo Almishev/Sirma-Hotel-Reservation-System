@@ -1,0 +1,29 @@
+[33mcommit 828b7a9c25a2db915e55dcba141cc4be2128ae5c[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Anton Almishev <antonalmishev@abv.bg>
+Date:   Tue Nov 19 21:47:23 2024 +0200
+
+    Remove field String roomType and replace it with field RoomType roomType
+
+[33mcommit 87c55b3a467c9a8045fe863dadc401e4a72481ea[m
+Author: Anton Almishev <antonalmishev@abv.bg>
+Date:   Tue Nov 19 14:07:11 2024 +0200
+
+    Starting making Protected methods for more security and OOP
+
+[33mcommit a48dde4aea4853dba9260f25c2905dde2778d68d[m
+Author: Anton Almishev <antonalmishev@abv.bg>
+Date:   Mon Nov 18 16:24:37 2024 +0200
+
+    adding instructons for the project
+
+[33mcommit 6bd084cb7a3e3439728cf2fecaf4b3476e67308a[m
+Author: Anton Almishev <antonalmishev@abv.bg>
+Date:   Mon Nov 18 16:18:42 2024 +0200
+
+    Hotel System
+
+[33mcommit 8a745b8972ec32d565a94e43ee4c1be96730d43e[m
+Author: Anton Almishev <antonalmishev@abv.bg>
+Date:   Mon Nov 18 16:17:11 2024 +0200
+
+    first commit

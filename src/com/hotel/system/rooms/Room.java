@@ -2,6 +2,7 @@ package com.hotel.system.rooms;
 
 import com.hotel.system.booking.Booking;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,6 @@ public class Room {
         return available;
     }
 
-    public void addBooking(Booking booking) {
-        bookings.add(booking);
-    }
     public void setAvailable(boolean available) {
         this.available = available;
     }
@@ -56,15 +54,14 @@ public class Room {
 
 
 
-    public boolean isAvailableForDates(String startDate, String endDate) {
+    public boolean isAvailableForDates(LocalDate startDate, LocalDate endDate) {
         for (Booking booking : bookings) {
-            if (booking.overlapsWith(startDate, endDate)) {
+            if (!(endDate.isBefore(booking.getStartDate()) || startDate.isAfter(booking.getEndDate()))) {
                 return false;
             }
         }
         return true;
     }
-
 
     @Override
     public String toString() {

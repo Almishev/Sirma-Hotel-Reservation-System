@@ -1,11 +1,15 @@
 package com.hotel.system.booking;
 
+import com.hotel.system.interfaces.LoadAble;
+import com.hotel.system.interfaces.SaveAble;
 import com.hotel.system.rooms.Room;
 import com.hotel.system.rooms.RoomManager;
 import com.hotel.system.rooms.RoomType;
 import com.hotel.system.rooms.RoomTypeManager;
 import com.hotel.system.users.User;
 import com.hotel.system.users.UserManager;
+import java.time.LocalDate;
+import java.util.List;
 
 import java.io.*;
 import java.util.*;
@@ -24,9 +28,6 @@ public class BookingManager {
         this.bookings = loadBookingsFromFile();
     }
 
-    private List<Room> checkRoomAvailability(String roomType, String startDate, String endDate) {
-        return roomManager.getAvailableRooms(roomType, startDate, endDate);
-    }
 
     private void saveBookingToFile(Booking booking) {
         System.out.println("Attempting to save booking: " + booking);
@@ -66,7 +67,7 @@ public class BookingManager {
             User user = userManager.getUser(bookingToCancel.getUsername());
             if (user != null) {
 
-                userManager.saveUsersToFile();
+                userManager.saveDataToFile();
             }
 
             return true;
@@ -92,34 +93,48 @@ public class BookingManager {
     }
 
 
-    public boolean bookRoom(String username, String roomType, String startDate, String endDate) {
-        boolean hasAvailableRooms = roomManager.checkRoomAvailability(roomType, startDate, endDate);
+    public boolean bookRoom(String username, String roomType, String startDate, String endDate, UserManager userManager) throws Exception {
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        boolean hasAvailableRooms = roomManager.checkRoomAvailability(roomType, start, end);
         if (!hasAvailableRooms) {
             System.out.println("No rooms available for the selected type and dates.");
-            return false;}
-        List<Room> availableRooms = roomManager.getAvailableRooms(roomType, startDate, endDate);
+            return false;
+        }
+
+        List<Room> availableRooms = roomManager.getAvailableRooms(roomType, start, end);
         List<Booking> existingBookings = loadBookingsFromFile();
+
         for (Room room : availableRooms) {
             boolean isRoomBooked = existingBookings.stream().anyMatch(b ->
                     b.getRoomNumber() == room.getRoomNumber() &&
-                            !(endDate.compareTo(b.getStartDate()) <= 0 || startDate.compareTo(b.getEndDate()) >= 0));
+                            !(end.isBefore(b.getStartDate()) || start.isAfter(b.getEndDate())));
+
             if (!isRoomBooked) {
                 room.setAvailable(false);
                 roomManager.updateRoomStatus(room.getRoomNumber(), false);
+
                 User user = userManager.getUser(username);
                 if (user != null) {
-                    String bookingDetails = room.getRoomNumber() + "," + startDate + "," + endDate;
-                    user.addBooking(bookingDetails);
-                    userManager.saveUsersToFile();}
-                Booking booking = new Booking(username, room.getRoomNumber(), room.getType(), startDate, endDate);
+                    String bookingDetails = room.getRoomNumber() + "," + start + "," + end;
+                    userManager.addBookingToHistory(username,bookingDetails);
+                    userManager.saveDataToFile();
+                }
+
+                Booking booking = new Booking(username, room.getRoomNumber(), room.getType(), start, end);
                 saveBookingToFile(booking);
+
                 System.out.println("Room " + room.getRoomNumber() + " booked successfully.");
                 return true;
             }
         }
+
         System.out.println("No rooms available for the selected type and dates.");
         return false;
     }
+
 
 
 
@@ -151,9 +166,6 @@ public class BookingManager {
         return bookings;
     }
 
-    public List<Booking> getAllBookings() {
-        return bookings;
-    }
 
 
 }

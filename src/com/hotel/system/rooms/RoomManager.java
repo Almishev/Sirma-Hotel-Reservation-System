@@ -1,19 +1,23 @@
 package com.hotel.system.rooms;
 
 
+import com.hotel.system.interfaces.LoadAble;
+import com.hotel.system.interfaces.SaveAble;
+
 import java.io.*;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RoomManager {
+public class RoomManager implements LoadAble, SaveAble {
     private List<Room> rooms;
 
     public RoomManager() {
         this.rooms = new ArrayList<>();
-        loadRoomsFromFile();
+        loadDataFromFile();
     }
-    private void loadRoomsFromFile() {
+    @Override
+    public void loadDataFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader("resources/rooms.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -81,7 +85,7 @@ public class RoomManager {
         Room room = findRoomByNumber(roomNumber);
         if (room != null) {
             room.setAvailable(isAvailable);
-            saveRoomsToFile();
+            saveDataToFile();
             System.out.println("Room " + roomNumber + " status updated to " + (isAvailable ? "Available" : "Booked"));
         } else {
             System.out.println("Room " + roomNumber + " not found.");
@@ -93,7 +97,7 @@ public class RoomManager {
         return rooms;
     }
 
-    public List<Room> getAvailableRooms(String roomTypeName, String startDate, String endDate) {
+    public List<Room> getAvailableRooms(String roomTypeName, LocalDate startDate, LocalDate endDate) {
         List<Room> availableRooms = new ArrayList<>();
 
         for (Room room : rooms) {
@@ -108,13 +112,14 @@ public class RoomManager {
     }
 
 
-    public boolean checkRoomAvailability(String roomType, String startDate, String endDate) {
+    public boolean checkRoomAvailability(String roomType, LocalDate startDate, LocalDate endDate) {
         List<Room> availableRooms = getAvailableRooms(roomType, startDate, endDate);
         return !availableRooms.isEmpty();
     }
 
 
-    public void saveRoomsToFile() {
+    @Override
+    public void saveDataToFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("resources/rooms.txt"))) {
             for (Room room : rooms) {
                 bw.write(room.getRoomNumber() + "," + room.getType() + "," +

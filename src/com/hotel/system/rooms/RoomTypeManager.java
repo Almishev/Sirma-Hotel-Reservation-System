@@ -1,6 +1,8 @@
 package com.hotel.system.rooms;
 
 
+import com.hotel.system.interfaces.LoadAble;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,17 +10,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RoomTypeManager {
+public class RoomTypeManager implements LoadAble {
 
     private List<RoomType> roomTypes;
 
     public RoomTypeManager() {
         this.roomTypes = new ArrayList<>();
-        loadRoomTypesFromFile();
+        loadDataFromFile();
     }
 
 
-    private void loadRoomTypesFromFile() {
+     @Override
+     public void loadDataFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader("resources/room_types.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -39,9 +42,6 @@ public class RoomTypeManager {
         }
     }
 
-    public List<RoomType> getRoomTypes() {
-        return roomTypes;
-    }
 
     public RoomType findRoomTypeByName(String roomTypeName) {
         for (RoomType roomType : roomTypes) {

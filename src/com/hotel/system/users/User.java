@@ -36,18 +36,6 @@ public class User {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public boolean checkPassword(String password) {
-        return this.password.equals(password);
-    }
-
-    public void addBooking(String bookingDetails) {
-        bookingHistory.add(bookingDetails);
-    }
-
     public List<String> getBookingHistory() {
         return bookingHistory;
     }
